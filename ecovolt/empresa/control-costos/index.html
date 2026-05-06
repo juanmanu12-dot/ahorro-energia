@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Evocolt — Control de costos</title>
+  <link rel="stylesheet" href="../../shared/global.css"/>
+  <link rel="stylesheet" href="../../shared/components.css"/>
+  <link rel="stylesheet" href="../../shared/profile-menu.css"/>
+  <link rel="stylesheet" href="../../shared/config-modal.css"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="page-center"><div class="phone-frame">
+
+  <div class="sub-top-bar">
+    <a href="../inicio/index.html" class="back-btn">←</a>
+    <span class="sub-title">Control de costos</span>
+    <button class="icon-btn">📅</button>
+  </div>
+
+  <div class="phone-body" style="overflow-y:auto;max-height:600px;">
+
+    <!-- Período -->
+    <div class="period-tabs">
+      <button class="period-tab" id="tab-dia"    onclick="setPeriod('dia')">Día</button>
+      <button class="period-tab" id="tab-semana" onclick="setPeriod('semana')">Semana</button>
+      <button class="period-tab active" id="tab-mes" onclick="setPeriod('mes')">Mes</button>
+    </div>
+
+    <!-- Gasto principal -->
+    <div class="card gasto-card">
+      <div style="font-size:12px;color:var(--gray-text);margin-bottom:4px;" id="gastoLabel">Gasto mensual</div>
+      <div style="font-family:var(--font-display);font-size:30px;font-weight:900;color:var(--green-dark);margin-bottom:4px;" id="gastoAmt">COP $3.200.000</div>
+      <div style="font-size:12px;font-weight:600;margin-bottom:0;" id="gastoDelta">↑ 14% sobre la meta</div>
+    </div>
+
+    <!-- Meta mensual EDITABLE -->
+    <div class="card meta-card">
+      <div class="meta-header">
+        <div>
+          <div style="font-size:12px;color:var(--gray-text);margin-bottom:2px;">Meta mensual</div>
+          <div style="font-size:18px;font-weight:700;color:var(--text-dark);" id="metaDisplay">COP $2.800.000</div>
+        </div>
+        <button class="edit-meta-btn" onclick="openMetaModal()">✏ Editar</button>
+      </div>
+      <div class="meta-bar-track">
+        <div class="meta-bar-fill" id="metaBar" style="width:114%"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;margin-top:4px;">
+        <span style="color:var(--gray-text);">0</span>
+        <span id="metaPct" style="font-weight:700;color:var(--red);">114%</span>
+        <span style="color:var(--gray-text);" id="metaMax">$2.800.000</span>
+      </div>
+    </div>
+
+    <!-- Comparación -->
+    <div class="card">
+      <div class="section-title">Comparación <span id="compareLabel">Abril vs Mayo</span></div>
+      <div class="compare-grid" id="compareGrid"></div>
+      <div class="compare-delta" id="compareDelta"></div>
+    </div>
+
+    <!-- Desglose por área -->
+    <div class="card">
+      <div class="section-title">Desglose por área</div>
+      <div class="desglose-row">
+        <svg viewBox="0 0 100 100" width="80" height="80" id="desglSvg">
+          <circle cx="50" cy="50" r="36" fill="none" stroke="#eee" stroke-width="16"/>
+        </svg>
+        <div class="desglose-list" id="desglosList"></div>
+      </div>
+    </div>
+
+    <!-- Recomendación -->
+    <div class="alert-card" id="recCard">
+      📊 <span id="recText">Cargando recomendación...</span>
+    </div>
+
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="../inicio/index.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#6b7c74" stroke-width="1.5"/></svg>Inicio</a>
+    <a href="../areas/index.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="1" stroke="#6b7c74" stroke-width="1.5"/><rect x="13" y="3" width="8" height="8" rx="1" stroke="#6b7c74" stroke-width="1.5"/><rect x="3" y="13" width="8" height="8" rx="1" stroke="#6b7c74" stroke-width="1.5"/><rect x="13" y="13" width="8" height="8" rx="1" stroke="#6b7c74" stroke-width="1.5"/></svg>Áreas</a>
+    <div class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="#2e8b57" stroke-width="1.5" stroke-linecap="round"/></svg>Costos</div>
+    <a href="../reporte-ejecutivo/index.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M9 17H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2" stroke="#6b7c74" stroke-width="1.5"/></svg>Reportes</a>
+  </nav>
+
+</div></div>
+
+<!-- MODAL: Editar meta -->
+<div class="modal-overlay" id="metaModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">Editar meta mensual</span>
+      <button class="modal-close" onclick="closeMetaModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--gray-text);margin-bottom:16px;">Define cuánto quieres gastar máximo en energía cada mes.</p>
+      <div class="input-group">
+        <label class="input-label">Nueva meta (COP)</label>
+        <input class="input-field" type="number" id="newMetaInput" placeholder="Ej. 2500000"/>
+      </div>
+      <div class="meta-presets">
+        <span class="input-label" style="display:block;margin-bottom:6px;">Sugerencias rápidas:</span>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <button class="preset-btn" onclick="setPreset(2000000)">$2.000.000</button>
+          <button class="preset-btn" onclick="setPreset(2500000)">$2.500.000</button>
+          <button class="preset-btn" onclick="setPreset(2800000)">$2.800.000</button>
+          <button class="preset-btn" onclick="setPreset(3500000)">$3.500.000</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeMetaModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveMeta()">Guardar meta</button>
+    </div>
+  </div>
+</div>
+
+<script src="../../shared/profile-menu.js"></script>
+<script>
+const COLORS = ['#4a90d9','#2e8b57','#d4b24a'];
+const TARIFA = 112;
+function fmt(n) { return 'COP $' + Math.round(n).toLocaleString('es-CO'); }
+
+let meta = 2800000;
+
+const PERIODS = {
+  mes:    { label:'Gasto mensual',  gasto:3200000, anterior:2800000, labelCompare:'Abril vs Mayo',
+            sectors:[{n:'Producción',kwh:14280},{n:'Oficinas',kwh:9996},{n:'Iluminación',kwh:4284}] },
+  semana: { label:'Gasto semanal',  gasto:800000,  anterior:650000,  labelCompare:'Semana pasada vs esta',
+            sectors:[{n:'Producción',kwh:3360},{n:'Oficinas',kwh:2352},{n:'Iluminación',kwh:1008}] },
+  dia:    { label:'Gasto de hoy',   gasto:125000,  anterior:108000,  labelCompare:'Ayer vs hoy',
+            sectors:[{n:'Producción',kwh:476},{n:'Oficinas',kwh:333},{n:'Iluminación',kwh:143}] },
+};
+
+let period = 'mes';
+
+function setPeriod(p) {
+  period = p;
+  ['dia','semana','mes'].forEach(t => document.getElementById('tab-'+t).classList.toggle('active',t===p));
+  render();
+}
+
+function render() {
+  const d = PERIODS[period];
+  const metaPeriod = period==='mes' ? meta : period==='semana' ? meta/4 : meta/30;
+  const pct = Math.round((d.gasto/metaPeriod)*100);
+  const over = pct > 100;
+
+  document.getElementById('gastoLabel').textContent = d.label;
+  document.getElementById('gastoAmt').textContent   = fmt(d.gasto);
+  document.getElementById('gastoDelta').textContent = over
+    ? `↑ ${pct-100}% sobre la meta`
+    : `✓ ${100-pct}% por debajo de la meta`;
+  document.getElementById('gastoDelta').style.color = over ? 'var(--red)' : 'var(--green-mid)';
+
+  // Meta bar
+  document.getElementById('metaDisplay').textContent = fmt(metaPeriod);
+  document.getElementById('metaMax').textContent = fmt(metaPeriod).replace('COP ','');
+  const barW = Math.min(100, pct);
+  document.getElementById('metaBar').style.width = barW + '%';
+  document.getElementById('metaBar').style.background = over ? 'var(--red)' : pct>80 ? 'var(--orange)' : 'var(--green-mid)';
+  document.getElementById('metaPct').textContent = pct + '%';
+  document.getElementById('metaPct').style.color  = over ? 'var(--red)' : 'var(--green-mid)';
+
+  // Compare
+  document.getElementById('compareLabel').textContent = d.labelCompare;
+  const diff = d.gasto - d.anterior;
+  const diffPct = Math.round(Math.abs(diff/d.anterior)*100);
+  document.getElementById('compareGrid').innerHTML = `
+    <div class="cg-col"><div class="cg-lbl">Período anterior</div><div class="cg-val">${fmt(d.anterior)}</div></div>
+    <div class="cg-col"><div class="cg-lbl">Período actual</div><div class="cg-val" style="color:${diff>0?'var(--red)':'var(--green-mid)'}">${fmt(d.gasto)}</div></div>`;
+  document.getElementById('compareDelta').innerHTML =
+    `<span style="color:${diff>0?'var(--red)':'var(--green-mid)'};font-weight:700;">${diff>0?'↑':'↓'} ${fmt(Math.abs(diff))} (${diffPct}%)</span>`;
+
+  // Desglose
+  const total = d.sectors.reduce((s,x)=>s+x.kwh,0);
+  renderDesglose(d.sectors, total);
+
+  // Recomendación
+  const topSector = [...d.sectors].sort((a,b)=>b.kwh-a.kwh)[0];
+  const saving = fmt(Math.round(topSector.kwh*0.1*TARIFA));
+  document.getElementById('recText').textContent =
+    `Reduciendo el 10% del consumo en ${topSector.n} podrías ahorrar ${saving} ${period==='mes'?'al mes':period==='semana'?'esta semana':'hoy'}.`;
+}
+
+function renderDesglose(sectors, total) {
+  const svg = document.getElementById('desglSvg');
+  svg.querySelectorAll('.arc').forEach(e=>e.remove());
+  const R=36,C=50,W=16,circ=2*Math.PI*R;
+  let off=0;
+  sectors.forEach((s,i)=>{
+    const dash=(s.kwh/total)*circ;
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',C);c.setAttribute('cy',C);c.setAttribute('r',R);
+    c.setAttribute('fill','none');c.setAttribute('stroke',COLORS[i%COLORS.length]);
+    c.setAttribute('stroke-width',W);
+    c.setAttribute('stroke-dasharray',`${dash} ${circ-dash}`);
+    c.setAttribute('stroke-dashoffset',-off);
+    c.setAttribute('transform',`rotate(-90 ${C} ${C})`);
+    c.classList.add('arc');
+    svg.insertBefore(c,svg.querySelector('circle'));
+    off+=dash;
+  });
+
+  const list = document.getElementById('desglosList');
+  list.innerHTML = sectors.map((s,i)=>{
+    const pct=((s.kwh/total)*100).toFixed(0);
+    const cop=s.kwh*TARIFA;
+    return `<div class="desg-item">
+      <span class="desg-dot" style="background:${COLORS[i%COLORS.length]}"></span>
+      <div><div style="font-size:12px;font-weight:600">${s.n}</div><div style="font-size:11px;color:var(--gray-text)">${pct}%</div></div>
+      <div style="font-size:12px;font-weight:700;color:${COLORS[i%COLORS.length]};margin-left:auto">${fmt(cop)}</div>
+    </div>`;
+  }).join('');
+}
+
+// Meta modal
+function openMetaModal() {
+  document.getElementById('newMetaInput').value = meta;
+  document.getElementById('metaModal').classList.add('open');
+}
+function closeMetaModal() { document.getElementById('metaModal').classList.remove('open'); }
+function setPreset(v) { document.getElementById('newMetaInput').value = v; }
+function saveMeta() {
+  const v = parseFloat(document.getElementById('newMetaInput').value);
+  if (!v||v<=0) { alert('Ingresa una meta válida.'); return; }
+  meta = v;
+  closeMetaModal();
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

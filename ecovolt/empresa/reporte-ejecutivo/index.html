@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Evocolt — Reportes</title>
+  <link rel="stylesheet" href="../../shared/global.css"/>
+  <link rel="stylesheet" href="../../shared/components.css"/>
+  <link rel="stylesheet" href="../../shared/profile-menu.css"/>
+  <link rel="stylesheet" href="../../shared/config-modal.css"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="page-center"><div class="phone-frame">
+
+  <div class="sub-top-bar">
+    <a href="../inicio/index.html" class="back-btn">←</a>
+    <span class="sub-title">Reporte ejecutivo</span>
+    <button class="icon-btn">📅</button>
+  </div>
+
+  <div class="phone-body" style="overflow-y:auto;max-height:600px;">
+
+    <!-- Selector de mes -->
+    <div class="month-selector">
+      <button class="month-nav" onclick="changeMonth(-1)">‹</button>
+      <div class="month-label" id="monthLabel">Mayo 2024</div>
+      <button class="month-nav" onclick="changeMonth(1)">›</button>
+    </div>
+
+    <!-- KPIs del mes seleccionado -->
+    <div class="stat-row" id="kpiRow" style="margin-bottom:14px;"></div>
+
+    <!-- Resumen narrativo -->
+    <div class="card" id="resumenCard">
+      <div class="section-title">Resumen del mes</div>
+      <ul class="resumen-list" id="resumenList"></ul>
+    </div>
+
+    <!-- Gráfico de evolución (barras SVG) -->
+    <div class="card">
+      <div class="section-title">Evolución de consumo (kWh)</div>
+      <svg id="chartSvg" viewBox="0 0 300 100" width="100%" style="overflow:visible;"></svg>
+      <div class="chart-labels" id="chartLabels"></div>
+    </div>
+
+    <!-- Tabla de historial -->
+    <div class="card">
+      <div class="section-title">Historial mensual</div>
+      <div class="hist-table" id="histTable"></div>
+    </div>
+
+    <!-- Recomendación -->
+    <div class="alert-card" id="recCard">
+      🤖 <span id="recText">—</span>
+    </div>
+
+    <button class="btn-primary" style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;">
+      ⬇ Descargar reporte (PDF)
+    </button>
+
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="../inicio/index.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#6b7c74" stroke-width="1.5"/></svg>Inicio</a>
+    <a href="../areas/index.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="1" stroke="#6b7c74" stroke-width="1.5"/><rect x="13" y="3" width="8" height="8" rx="1" stroke="#6b7c74" stroke-width="1.5"/><rect x="3" y="13" width="8" height="8" rx="1" stroke="#6b7c74" stroke-width="1.5"/><rect x="13" y="13" width="8" height="8" rx="1" stroke="#6b7c74" stroke-width="1.5"/></svg>Áreas</a>
+    <a href="../control-costos/index.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="#6b7c74" stroke-width="1.5" stroke-linecap="round"/></svg>Costos</a>
+    <div class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><path d="M9 17H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2" stroke="#2e8b57" stroke-width="1.5"/></svg>Reportes</div>
+  </nav>
+
+</div></div>
+<script src="../../shared/profile-menu.js"></script>
+<script>
+function fmt(n) { return 'COP $' + Math.round(n).toLocaleString('es-CO'); }
+
+// Historial de 6 meses — datos simulados realistas
+const MESES = [
+  { label:'Dic 2023', kwh:31200, gasto:3494400, meta:2800000, ahorro:280000,
+    bullets:['Consumo elevado por fin de año.','Iluminación navideña sumó 1.200 kWh extra.','Se superó la meta en un 24%.'] },
+  { label:'Ene 2024', kwh:28900, gasto:3236800, meta:2800000, ahorro:310000,
+    bullets:['Reducción post-vacaciones del 7%.','Producción retomó operaciones el día 8.','Se superó la meta en un 15%.'] },
+  { label:'Feb 2024', kwh:25400, gasto:2844800, meta:2800000, ahorro:295000,
+    bullets:['Mes corto con buen desempeño.','Consumo rozó la meta por poco.','Producción bajó 12% vs enero.'] },
+  { label:'Mar 2024', kwh:27100, gasto:3035200, meta:2800000, ahorro:320000,
+    bullets:['Inicio de temporada alta en producción.','Oficinas redujeron consumo un 5%.','Meta superada en un 8%.'] },
+  { label:'Abr 2024', kwh:25000, gasto:2800000, meta:2800000, ahorro:340000,
+    bullets:['Primer mes dentro de la meta. 🎉','Campaña interna de ahorro dio resultados.','Iluminación redujo un 18%.'] },
+  { label:'May 2024', kwh:28560, gasto:3200000, meta:2800000, ahorro:350000,
+    bullets:['El consumo aumentó 5% vs abril.','El gasto aumentó 14% vs la meta.','Oportunidad de ahorro de $350.000 identificada.'] },
+];
+
+let idx = MESES.length - 1; // empieza en el más reciente
+
+function changeMonth(dir) {
+  idx = Math.max(0, Math.min(MESES.length-1, idx+dir));
+  render();
+}
+
+function render() {
+  const m = MESES[idx];
+  const prev = MESES[idx-1];
+  document.getElementById('monthLabel').textContent = m.label;
+
+  // Flecha botones
+  document.querySelector('.month-nav:first-child').disabled = idx === 0;
+  document.querySelector('.month-nav:last-child').disabled  = idx === MESES.length-1;
+
+  // KPIs
+  const vsPrevKwh  = prev ? ((m.kwh - prev.kwh)/prev.kwh*100).toFixed(0) : null;
+  const vsPrevGasto= prev ? ((m.gasto-prev.gasto)/prev.gasto*100).toFixed(0) : null;
+  const pctMeta    = Math.round(m.gasto/m.meta*100);
+
+  document.getElementById('kpiRow').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-icon">⚡</div>
+      <div class="stat-val" style="font-size:11px">${m.kwh.toLocaleString()} kWh</div>
+      <div class="stat-lbl">Consumo</div>
+      ${prev ? `<div style="font-size:10px;color:${vsPrevKwh>0?'var(--red)':'var(--green-mid)'};margin-top:2px">${vsPrevKwh>0?'↑':'↓'} ${Math.abs(vsPrevKwh)}%</div>` : ''}
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">💰</div>
+      <div class="stat-val" style="font-size:10px">${fmt(m.gasto).replace('COP ','')}</div>
+      <div class="stat-lbl">Gasto</div>
+      ${prev ? `<div style="font-size:10px;color:${vsPrevGasto>0?'var(--red)':'var(--green-mid)'};margin-top:2px">${vsPrevGasto>0?'↑':'↓'} ${Math.abs(vsPrevGasto)}%</div>` : ''}
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">${pctMeta>100?'🔴':'✅'}</div>
+      <div class="stat-val" style="font-size:11px;color:${pctMeta>100?'var(--red)':'var(--green-mid)'}">${pctMeta}% meta</div>
+      <div class="stat-lbl">vs Meta</div>
+    </div>`;
+
+  // Bullets
+  document.getElementById('resumenList').innerHTML =
+    m.bullets.map(b=>`<li>${b}</li>`).join('');
+
+  // Gráfico de barras
+  renderChart();
+
+  // Historial tabla
+  const table = document.getElementById('histTable');
+  table.innerHTML = `
+    <div class="hist-header">
+      <span>Mes</span><span>kWh</span><span>Gasto</span><span>Meta</span>
+    </div>` +
+    [...MESES].reverse().map((r,i) => {
+      const ri = MESES.length-1-i;
+      const over = r.gasto > r.meta;
+      return `<div class="hist-row ${ri===idx?'active':''}" onclick="jumpTo(${ri})">
+        <span class="hist-mes">${r.label}</span>
+        <span>${r.kwh.toLocaleString()}</span>
+        <span style="color:${over?'var(--red)':'var(--green-mid)'};font-weight:600">${fmt(r.gasto).replace('COP ','')}</span>
+        <span class="hist-badge ${over?'over':'ok'}">${over?'↑':'✓'}</span>
+      </div>`;
+    }).join('');
+
+  // Recomendación
+  const saving = fmt(m.ahorro);
+  document.getElementById('recText').textContent =
+    `En ${m.label}, el ahorro estimado identificado fue de ${saving}. ${m.gasto > m.meta ? 'Hay oportunidad de optimizar producción e iluminación.' : '¡Bien! Sigue manteniendo este ritmo.'}`;
+}
+
+function jumpTo(i) { idx=i; render(); }
+
+function renderChart() {
+  const svg = document.getElementById('chartSvg');
+  svg.innerHTML = '';
+  const W=300, H=80, pad=10;
+  const maxKwh = Math.max(...MESES.map(m=>m.kwh));
+  const barW = (W - pad*2) / MESES.length - 4;
+
+  MESES.forEach((m,i) => {
+    const barH = ((m.kwh / maxKwh) * (H-20));
+    const x = pad + i*(barW+4);
+    const y = H - barH - 10;
+    const active = i === idx;
+
+    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x', x); rect.setAttribute('y', y);
+    rect.setAttribute('width', barW); rect.setAttribute('height', barH);
+    rect.setAttribute('rx', 3);
+    rect.setAttribute('fill', active ? '#1a5c3a' : m.gasto>m.meta ? '#e05252' : '#b2d8c4');
+    rect.style.cursor = 'pointer';
+    rect.addEventListener('click', () => { idx=i; render(); });
+    svg.appendChild(rect);
+  });
+
+  // Labels below
+  document.getElementById('chartLabels').innerHTML =
+    MESES.map((m,i)=>`<span class="${i===idx?'clbl active':'clbl'}" onclick="jumpTo(${i})">${m.label.slice(0,3)}</span>`).join('');
+}
+
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Evocolt — Empresa</title>
+  <link rel="stylesheet" href="../../shared/global.css"/>
+  <link rel="stylesheet" href="../../shared/components.css"/>
+  <link rel="stylesheet" href="../../shared/profile-menu.css"/>
+  <link rel="stylesheet" href="../../shared/config-modal.css"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="page-center"><div class="phone-frame">
+
+  <div class="top-bar-empresa">
+    <div class="emp-left">
+      <button class="hamburger">☰</button>
+      <div>
+        <div class="emp-brand">Evocolt</div>
+        <div class="emp-name">Empresa Verde S.A.S ▾</div>
+      </div>
+    </div>
+    <div class="avatar-wrap">
+      <button class="avatar-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#2e8b57" stroke-width="1.5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#2e8b57" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+
+  <div class="phone-body" style="overflow-y:auto;max-height:580px;">
+
+    <!-- Resumen hoy (dark card) -->
+    <div class="today-card">
+      <div class="today-header">
+        <span class="today-title">Resumen de hoy</span>
+        <span class="today-time">Actualizado 08:30 AM</span>
+        <span class="today-trend">↗</span>
+      </div>
+      <div class="today-stats">
+        <div><div class="today-label">Consumo actual</div><div class="today-val" id="todayKwh">1,245 kWh</div><div class="today-delta down">↓ 8% vs ayer</div></div>
+        <div><div class="today-label">Gasto actual</div><div class="today-val" id="todayCop">COP $125,000</div><div class="today-delta up">↑ 6% vs ayer</div></div>
+      </div>
+    </div>
+
+    <!-- Resumen del mes -->
+    <div class="card">
+      <div class="section-title">Resumen del mes <span style="font-size:11px;font-weight:400;color:var(--gray-text)">Mayo 2024</span></div>
+      <div class="month-grid">
+        <div><div class="mg-label">Consumo total</div><div class="mg-val" id="mgKwh">—</div></div>
+        <div><div class="mg-label">Gasto total</div><div class="mg-val" id="mgCop">—</div></div>
+        <div><div class="mg-label">Meta mensual</div><div class="mg-val">$2.800.000</div></div>
+      </div>
+      <div class="over-bar"><div class="over-fill" id="overFill" style="width:0%"></div></div>
+      <div style="text-align:right;font-size:11px;font-weight:700;" id="overPct"></div>
+    </div>
+
+    <!-- Consumo por sectores -->
+    <div class="section-title">
+      Sectores de consumo
+      <button class="add-sector-btn" onclick="openSectorModal()">+ Sector</button>
+    </div>
+
+    <!-- Gráfico donut + leyenda -->
+    <div class="card donut-card">
+      <div class="donut-row">
+        <svg viewBox="0 0 120 120" width="110" height="110" id="donutSvg">
+          <circle cx="60" cy="60" r="44" fill="none" stroke="#eee" stroke-width="18"/>
+          <text x="60" y="56" text-anchor="middle" font-size="11" font-weight="700" fill="#0f2e1e" id="donutTotal">—</text>
+          <text x="60" y="68" text-anchor="middle" font-size="8" fill="#6b7c74">kWh Total</text>
+        </svg>
+        <div class="donut-legend" id="donutLegend"></div>
+      </div>
+    </div>
+
+    <div class="sectors-list" id="sectorsList"></div>
+
+    <!-- Alertas y recomendaciones -->
+    <div class="section-title" style="margin-top:4px;">Alertas y recomendaciones</div>
+    <div class="alert-card danger" id="alertArea">🔴 <span>Ingresa sectores para ver alertas de consumo.</span></div>
+    <div class="alert-card warning">🟡 <span>Recuerda registrar equipos por sector para un cálculo preciso.</span></div>
+
+    <!-- Consejos carrusel -->
+    <div class="section-title" style="margin-top:4px;">💡 Consejos para tu empresa</div>
+    <div class="tips-viewport" id="tipsViewport">
+      <div class="tips-track" id="tipsTrack"></div>
+    </div>
+    <div class="tips-nav">
+      <button class="carousel-btn sm" onclick="slideTip(-1)">‹</button>
+      <div class="tips-dots" id="tipsDots"></div>
+      <button class="carousel-btn sm" onclick="slideTip(1)">›</button>
+    </div>
+
+  </div>
+
+  <nav class="bottom-nav">
+    <div class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#2e8b57" stroke-width="1.5" fill="#e8f5ee"/></svg>Inicio</div>
+    <a href="../areas/index.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="1" stroke="#6b7c74" stroke-width="1.5"/><rect x="13" y="3" width="8" height="8" rx="1" stroke="#6b7c74" stroke-width="1.5"/><rect x="3" y="13" width="8" height="8" rx="1" stroke="#6b7c74" stroke-width="1.5"/><rect x="13" y="13" width="8" height="8" rx="1" stroke="#6b7c74" stroke-width="1.5"/></svg>Áreas</a>
+    <a href="../control-costos/index.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="#6b7c74" stroke-width="1.5" stroke-linecap="round"/></svg>Costos</a>
+    <a href="../reporte-ejecutivo/index.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M9 17H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2" stroke="#6b7c74" stroke-width="1.5"/></svg>Reportes</a>
+  </nav>
+
+</div></div>
+
+<!-- MODAL: AGREGAR SECTOR -->
+<div class="modal-overlay" id="sectorModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">Agregar sector</span>
+      <button class="modal-close" onclick="closeSectorModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="input-group">
+        <label class="input-label">Nombre del sector o piso</label>
+        <input class="input-field" type="text" id="sName" placeholder="Ej. Piso 3 - Administración"/>
+      </div>
+      <div class="twin-inputs">
+        <div class="input-group">
+          <label class="input-label">Consumo (kWh/mes)</label>
+          <input class="input-field" type="number" id="sKwh" placeholder="Ej. 3500" oninput="previewSector()"/>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Equipos</label>
+          <input class="input-field" type="number" id="sEquip" placeholder="Ej. 24"/>
+        </div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">Horario de operación</label>
+        <select class="input-field" id="sHorario">
+          <option>Lunes a Viernes 8am–6pm</option>
+          <option>Lunes a Sábado 7am–8pm</option>
+          <option>24/7</option>
+          <option>Turnos rotativos</option>
+        </select>
+      </div>
+      <div class="sector-preview" id="sectorPreview" style="display:none;">
+        <div class="preview-label">Costo estimado</div>
+        <div class="preview-amount" id="previewAmt">—</div>
+        <div class="preview-sub" id="previewSub">—</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeSectorModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveSector()">Agregar sector</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: CONFIGURACIÓN -->
+<div class="modal-overlay" id="configModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">⚙️ Configuración</span>
+      <button class="modal-close" onclick="document.getElementById('configModal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="input-group"><label class="input-label">Nombre de la empresa</label><input class="input-field" type="text" placeholder="Empresa Verde S.A.S"/></div>
+      <div class="input-group"><label class="input-label">Meta mensual (COP)</label><input class="input-field" type="number" placeholder="2800000"/></div>
+      <div class="input-group"><label class="input-label">Empresa prestadora</label><select class="input-field"><option>EPM</option><option>Codensa</option><option>ESSA</option></select></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="document.getElementById('configModal').classList.remove('open')">Cancelar</button>
+      <button class="btn-primary" onclick="document.getElementById('configModal').classList.remove('open')">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../../shared/profile-menu.js"></script>
+<script>
+const TARIFA_EMP = 112;
+const META = 2800000;
+const COLORS = ['#4a90d9','#2e8b57','#d4b24a','#e09052','#9b59b6','#e05252','#1abc9c'];
+const ICONS  = ['🏭','🏢','💡','🖥️','🔧','📦','🏗️'];
+function fmt(n) { return 'COP $' + Math.round(n).toLocaleString('es-CO'); }
+
+let sectors = [
+  { name:'Producción',  kwh:14280, equip:48, horario:'Lunes a Viernes 8am–6pm' },
+  { name:'Oficinas',    kwh:9996,  equip:32, horario:'Lunes a Viernes 8am–6pm' },
+  { name:'Iluminación', kwh:4284,  equip:120,horario:'Lunes a Sábado 7am–8pm'  },
+];
+
+function renderAll() {
+  const total = sectors.reduce((s,x) => s+x.kwh, 0);
+  const totalCop = total * TARIFA_EMP;
+  const pct = Math.round((totalCop/META)*100);
+
+  // Today card
+  document.getElementById('todayKwh').textContent = (total/30).toFixed(0) + ' kWh';
+  document.getElementById('todayCop').textContent = fmt(totalCop/30);
+
+  // Month summary
+  document.getElementById('mgKwh').textContent = total.toLocaleString('es-CO') + ' kWh';
+  document.getElementById('mgCop').textContent = fmt(totalCop);
+  document.getElementById('overFill').style.width = Math.min(100,pct) + '%';
+  document.getElementById('overFill').style.background = pct>100 ? 'var(--red)' : pct>80 ? 'var(--orange)' : 'var(--green-mid)';
+  document.getElementById('overPct').textContent = pct + '% de la meta';
+  document.getElementById('overPct').style.color = pct>100 ? 'var(--red)' : 'var(--green-mid)';
+
+  // Donut SVG
+  document.getElementById('donutTotal').textContent = (total/1000).toFixed(1)+'k';
+  renderDonut(total);
+
+  // Legend
+  const legend = document.getElementById('donutLegend');
+  legend.innerHTML = sectors.map((s,i) => {
+    const p = total > 0 ? ((s.kwh/total)*100).toFixed(0) : 0;
+    return `<div class="legend-item"><span class="dot-color" style="background:${COLORS[i%COLORS.length]}"></span><span>${s.name} ${p}%</span></div>`;
+  }).join('');
+
+  // Sector list
+  const list = document.getElementById('sectorsList');
+  list.innerHTML = sectors.map((s,i) => {
+    const p = total > 0 ? ((s.kwh/total)*100).toFixed(0) : 0;
+    const cop = s.kwh * TARIFA_EMP;
+    return `<div class="sector-card" style="--accent:${COLORS[i%COLORS.length]}">
+      <div class="sc-top">
+        <span class="sc-icon">${ICONS[i%ICONS.length]}</span>
+        <div class="sc-info"><div class="sc-name">${s.name}</div><div class="sc-meta">${s.equip} equipos · ${s.horario}</div></div>
+        <button class="sc-del" onclick="delSector(${i})">✕</button>
+      </div>
+      <div class="sc-bar-row">
+        <div class="sc-bar-track"><div class="sc-bar-fill" style="width:${p}%;background:${COLORS[i%COLORS.length]}"></div></div>
+        <span class="sc-pct">${p}%</span>
+      </div>
+      <div class="sc-amounts"><span>${s.kwh.toLocaleString()} kWh/mes</span><span style="color:${COLORS[i%COLORS.length]};font-weight:700">${fmt(cop)}/mes</span></div>
+    </div>`;
+  }).join('');
+
+  // Alert
+  if (sectors.length > 0) {
+    const topSector = [...sectors].sort((a,b)=>b.kwh-a.kwh)[0];
+    const topPct = total > 0 ? ((topSector.kwh/total)*100).toFixed(0) : 0;
+    document.getElementById('alertArea').innerHTML = `🔴 <span>${topSector.name} representa el ${topPct}% del consumo total.</span>`;
+  }
+}
+
+function renderDonut(total) {
+  const svg = document.getElementById('donutSvg');
+  // Remove old arcs
+  svg.querySelectorAll('.arc').forEach(e => e.remove());
+  if (total === 0) return;
+  const R = 44, C = 60, W = 18;
+  const circ = 2 * Math.PI * R;
+  let offset = 0;
+  sectors.forEach((s,i) => {
+    const frac = s.kwh / total;
+    const dash = frac * circ;
+    const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    circle.setAttribute('cx', C); circle.setAttribute('cy', C); circle.setAttribute('r', R);
+    circle.setAttribute('fill','none');
+    circle.setAttribute('stroke', COLORS[i%COLORS.length]);
+    circle.setAttribute('stroke-width', W);
+    circle.setAttribute('stroke-dasharray', `${dash} ${circ-dash}`);
+    circle.setAttribute('stroke-dashoffset', -(offset));
+    circle.setAttribute('transform', `rotate(-90 ${C} ${C})`);
+    circle.classList.add('arc');
+    svg.insertBefore(circle, svg.querySelector('text'));
+    offset += dash;
+  });
+}
+
+function delSector(i) { if(confirm('¿Eliminar sector?')) { sectors.splice(i,1); renderAll(); } }
+
+function openSectorModal()  { document.getElementById('sectorModal').classList.add('open'); }
+function closeSectorModal() {
+  document.getElementById('sectorModal').classList.remove('open');
+  document.getElementById('sectorPreview').style.display='none';
+  ['sName','sKwh','sEquip'].forEach(id => document.getElementById(id).value='');
+}
+function previewSector() {
+  const kwh = parseFloat(document.getElementById('sKwh').value);
+  const prev = document.getElementById('sectorPreview');
+  if (!kwh||kwh<=0) { prev.style.display='none'; return; }
+  prev.style.display='';
+  document.getElementById('previewAmt').textContent = fmt(kwh*TARIFA_EMP);
+  document.getElementById('previewSub').textContent = `Tarifa empresa: $${TARIFA_EMP}/kWh`;
+}
+function saveSector() {
+  const name   = document.getElementById('sName').value.trim();
+  const kwh    = parseFloat(document.getElementById('sKwh').value);
+  const equip  = parseInt(document.getElementById('sEquip').value)||0;
+  const horario= document.getElementById('sHorario').value;
+  if (!name) { alert('Ingresa el nombre.'); return; }
+  if (!kwh||kwh<=0) { alert('Ingresa el consumo.'); return; }
+  sectors.push({ name, kwh, equip, horario });
+  renderAll();
+  closeSectorModal();
+}
+
+/* Consejos */
+const TIPS_EMP = [
+  { icon:'⏰', text:'Programa el apagado automático de equipos fuera del horario laboral. El consumo en standby puede ser el 20% del total.', save:'~$560.000/mes', color:'#1a5c3a' },
+  { icon:'💡', text:'Reemplaza la iluminación fluorescente por LED industrial. En áreas de producción el ahorro puede superar el 40%.', save:'~$192.000/mes', color:'#1f6e3e' },
+  { icon:'❄️', text:'Revisa el aislamiento térmico de áreas climatizadas. Fugas de aire pueden representar hasta el 25% del consumo de A/C.', save:'~$280.000/mes', color:'#174f30' },
+  { icon:'📊', text:'Instala medidores por sector para identificar picos de consumo y asignar responsabilidades de ahorro por área.', save:'~$350.000/mes', color:'#2e7a4a' },
+];
+let tipIdx = 0;
+function buildTips() {
+  document.getElementById('tipsTrack').innerHTML = TIPS_EMP.map(t =>
+    `<div class="htip-card" style="background:${t.color}"><span class="htip-icon">${t.icon}</span><div class="htip-text">${t.text}</div><div class="htip-save">💰 ${t.save}</div></div>`
+  ).join('');
+  document.getElementById('tipsDots').innerHTML = TIPS_EMP.map((_,i) =>
+    `<span class="dot ${i===0?'active':''}"></span>`).join('');
+}
+function slideTip(dir) {
+  tipIdx = (tipIdx+dir+TIPS_EMP.length)%TIPS_EMP.length;
+  const w = document.getElementById('tipsViewport').offsetWidth;
+  document.getElementById('tipsTrack').style.transform = `translateX(-${tipIdx*w}px)`;
+  document.querySelectorAll('#tipsDots .dot').forEach((d,i)=>d.classList.toggle('active',i===tipIdx));
+}
+const vp = document.getElementById('tipsViewport');
+let sx=0;
+vp.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;},{passive:true});
+vp.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>40)slideTip(dx<0?1:-1);});
+
+renderAll();
+buildTips();
+</script>
+</body>
+</html>

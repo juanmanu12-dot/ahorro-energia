@@ -1,0 +1,65 @@
+/* ==========================================
+   CONFIG MODAL — compartido
+   ========================================== */
+
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(15,46,30,0.45);
+  z-index: 200;
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.open { display: flex; animation: fadeOverlay 0.2s ease; }
+
+@keyframes fadeOverlay {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal-box {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  width: 100%; max-width: 340px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  overflow: hidden;
+  animation: slideUp 0.25s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(24px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--green-light);
+  background: var(--green-pale);
+}
+
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 18px; font-weight: 900; color: var(--green-dark);
+}
+
+.modal-close {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--white); border: 1.5px solid var(--green-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; cursor: pointer; color: var(--gray-text);
+  transition: background 0.2s;
+}
+
+.modal-close:hover { background: var(--green-pale); color: var(--green-dark); }
+
+.modal-body { padding: 20px; }
+
+.modal-footer {
+  padding: 0 20px 20px;
+  display: flex; gap: 10px;
+}
+
+.modal-footer .btn-secondary { flex: 1; }
+.modal-footer .btn-primary   { flex: 2; }

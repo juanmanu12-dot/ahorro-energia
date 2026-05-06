@@ -1,0 +1,89 @@
+.page-center {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+/* ── Botón volver en la barra del logo ── */
+.logo-centered {
+  position: relative;   /* permite posicionar el back-btn dentro */
+}
+
+.back-btn {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--white);
+  border: 1.5px solid var(--green-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--green-dark);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  line-height: 1;
+}
+
+.back-btn:hover {
+  background: var(--green-pale);
+  border-color: var(--green-mid);
+}
+
+/* ── Chip tipo de cuenta (igual que registro) ── */
+.account-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--green-pale);
+  border: 1.5px solid var(--green-light);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--green-dark);
+  margin-bottom: 18px;
+}
+
+.chip-change {
+  color: var(--green-mid);
+  font-weight: 700;
+  font-size: 11px;
+  margin-left: 4px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ── Campo contraseña ── */
+.pass-wrap { position: relative; }
+.pass-wrap .input-field { padding-right: 44px; }
+.pass-toggle {
+  position: absolute; right: 12px; top: 50%;
+  transform: translateY(-50%);
+  background: none; border: none; font-size: 16px;
+  cursor: pointer; opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.pass-toggle:hover { opacity: 1; }
+
+/* ── Olvidé mi contraseña ── */
+.forgot-row {
+  text-align: right;
+  margin-bottom: 4px;
+  margin-top: -6px;
+}
+
+.forgot-link {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--green-mid);
+}
+
+.forgot-link:hover { text-decoration: underline; }

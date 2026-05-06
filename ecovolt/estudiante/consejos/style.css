@@ -1,0 +1,141 @@
+.page-center { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px 16px; }
+.bottom-nav a { text-decoration:none; }
+.back-link { font-size:20px; color:var(--green-dark); text-decoration:none; margin-right:6px; }
+.page-title { font-weight:700; font-size:15px; color:var(--text-dark); }
+
+/* ── Carrusel TOD ── */
+.carousel-section {
+  margin-bottom: 18px;
+}
+
+.carousel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.carousel-label {
+  font-size: 12px; font-weight: 700;
+  color: var(--green-dark); letter-spacing: 0.4px; text-transform: uppercase;
+}
+
+.carousel-viewport {
+  overflow: hidden; border-radius: var(--radius-md);
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* TOD cards — cada una ocupa 100% del viewport */
+.tod-card {
+  flex-shrink: 0;
+  width: 100%;
+  padding: 20px 18px;
+  border-radius: var(--radius-md);
+  color: var(--white);
+  box-sizing: border-box;
+}
+
+.tod-icon  { font-size: 32px; margin-bottom: 10px; }
+.tod-text  { font-size: 14px; line-height: 1.55; margin-bottom: 12px; }
+.tod-save  { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.8);
+  background: rgba(255,255,255,0.15); display: inline-block;
+  padding: 3px 10px; border-radius: 20px; }
+
+.carousel-nav {
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px; margin-top: 10px;
+}
+
+.carousel-btn {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--green-pale); border: 1.5px solid var(--green-light);
+  font-size: 18px; color: var(--green-dark);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s;
+}
+.carousel-btn:hover { background: var(--green-dark); color: var(--white); border-color: var(--green-dark); }
+.carousel-btn.sm { width: 26px; height: 26px; font-size: 15px; }
+
+.carousel-pos { font-size: 12px; font-weight: 600; color: var(--gray-text); }
+
+/* Dots */
+.carousel-dots, .tips-dots {
+  display: flex; gap: 5px; align-items: center;
+}
+
+.dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green-light); transition: all 0.2s;
+}
+.dot.active { background: var(--green-dark); width: 16px; border-radius: 3px; }
+
+/* ── Category tabs ── */
+.cat-tabs {
+  display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 14px;
+  scrollbar-width: none;
+}
+.cat-tabs::-webkit-scrollbar { display: none; }
+
+.cat-tab {
+  flex-shrink: 0; padding: 7px 14px; border-radius: 20px;
+  border: 1.5px solid var(--green-light); background: var(--gray-soft);
+  font-size: 12px; font-weight: 600; color: var(--gray-text); cursor: pointer;
+  transition: all 0.2s;
+}
+.cat-tab.active, .cat-tab:hover { background: var(--green-dark); color: var(--white); border-color: var(--green-dark); }
+
+/* ── Tips carrusel ── */
+.tips-carousel-wrap { }
+
+.tips-carousel-viewport {
+  overflow: hidden; border-radius: var(--radius-md);
+}
+
+.tips-carousel-track {
+  display: flex;
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.tip-card {
+  flex-shrink: 0;
+  width: 100%;
+  padding: 20px 18px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid rgba(0,0,0,0.06);
+  box-sizing: border-box;
+  min-height: 180px;
+}
+
+.tip-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.tip-icon { font-size: 30px; }
+
+.tip-level {
+  font-size: 10px; font-weight: 700; padding: 3px 10px;
+  border-radius: 20px; background: rgba(0,0,0,0.07); color: var(--gray-text);
+}
+
+.tip-title {
+  font-family: var(--font-display); font-size: 18px; font-weight: 900;
+  color: var(--text-dark); margin-bottom: 8px; line-height: 1.2;
+}
+
+.tip-desc {
+  font-size: 13px; color: var(--gray-text); line-height: 1.5; margin-bottom: 14px;
+}
+
+.tip-saving {
+  font-size: 12px; font-weight: 700; color: var(--green-dark);
+  background: rgba(46,139,87,0.12); display: inline-block;
+  padding: 4px 12px; border-radius: 20px;
+}
+
+.tips-carousel-nav {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; margin-top: 12px;
+}

@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Fraunces:wght@700;900&display=swap');
+
+:root {
+  --green-dark:   #1a5c3a;
+  --green-mid:    #2e8b57;
+  --green-light:  #b2d8c4;
+  --green-pale:   #e8f5ee;
+  --green-accent: #3dbd72;
+  --white:        #ffffff;
+  --gray-soft:    #f4f9f6;
+  --gray-text:    #6b7c74;
+  --text-dark:    #0f2e1e;
+  --red:          #e05252;
+  --orange:       #e09052;
+  --yellow:       #d4b24a;
+  --blue:         #4a90d9;
+
+  --font-display: 'Fraunces', serif;
+  --font-body:    'DM Sans', sans-serif;
+
+  --radius-sm:  10px;
+  --radius-md:  16px;
+  --radius-lg:  24px;
+  --radius-xl:  36px;
+
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.10);
+  --shadow-lg: 0 20px 60px rgba(0,0,0,0.12);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  font-family: var(--font-body);
+  background: #f0f7f3;
+  color: var(--text-dark);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: var(--font-body); }
+input { font-family: var(--font-body); }

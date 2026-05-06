@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Evocolt — Tipo de cuenta</title>
+  <link rel="stylesheet" href="../../shared/global.css"/>
+  <link rel="stylesheet" href="../../shared/components.css"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="page-center">
+    <div class="phone-frame">
+
+      <!-- Logo -->
+      <div class="logo-centered">
+        <div class="logo-circle">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="14" r="8" stroke="#2e8b57" stroke-width="1.5"/>
+            <path d="M20 24C11 24 6 28 6 32" stroke="#2e8b57" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M20 24C29 24 34 28 34 32" stroke="#2e8b57" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="brand-name">Evocolt</span>
+      </div>
+
+      <!-- Body -->
+      <div class="phone-body">
+        <h1 class="screen-title">¿Qué tipo<br>de cuenta?</h1>
+        <p class="screen-sub">Selecciona tu perfil para personalizar tu experiencia energética.</p>
+
+        <!-- Hogar -->
+        <div class="type-card selected" data-type="hogar" onclick="select(this)">
+          <div class="type-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#2e8b57" stroke-width="1.5"/>
+              <rect x="9" y="11" width="6" height="10" stroke="#2e8b57" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="type-info">
+            <div class="type-name">Persona de Hogar</div>
+            <div class="type-desc">Gestiona tu consumo residencial</div>
+          </div>
+          <div class="radio-dot"></div>
+        </div>
+
+        <!-- Empresa -->
+        <div class="type-card" data-type="empresa" onclick="select(this)">
+          <div class="type-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <rect x="2" y="6" width="20" height="16" rx="1" stroke="#2e8b57" stroke-width="1.5"/>
+              <path d="M8 6V4h8v2" stroke="#2e8b57" stroke-width="1.5"/>
+              <line x1="8" y1="12" x2="16" y2="12" stroke="#2e8b57" stroke-width="1.2"/>
+              <line x1="8" y1="16" x2="13" y2="16" stroke="#2e8b57" stroke-width="1.2"/>
+            </svg>
+          </div>
+          <div class="type-info">
+            <div class="type-name">Empresa</div>
+            <div class="type-desc">Control energético corporativo</div>
+          </div>
+          <div class="radio-dot"></div>
+        </div>
+
+        <!-- Estudiante -->
+        <div class="type-card" data-type="estudiante" onclick="select(this)">
+          <div class="type-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M12 3L2 8l10 5 10-5-10-5z" stroke="#2e8b57" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M6 10.5v5c2 2 8 2 12-2v-3" stroke="#2e8b57" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="type-info">
+            <div class="type-name">Estudiante</div>
+            <div class="type-desc">Monitoreo en residencia estudiantil</div>
+          </div>
+          <div class="radio-dot"></div>
+        </div>
+
+        <button class="btn-primary" onclick="goToRegister()">Continuar →</button>
+
+        <div class="divider">¿Ya tienes cuenta?</div>
+
+        <a href="../login/index.html">
+          <button class="btn-secondary">Iniciar sesión</button>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    let selectedType = 'hogar';
+
+    function select(card) {
+      document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedType = card.dataset.type;
+    }
+
+    function goToRegister() {
+      sessionStorage.setItem('accountType', selectedType);
+      window.location.href = '../registro/index.html';
+    }
+  </script>
+</body>
+</html>

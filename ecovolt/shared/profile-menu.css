@@ -1,0 +1,75 @@
+/* ==========================================
+   PROFILE MENU DROPDOWN — compartido
+   ========================================== */
+
+.avatar-wrap {
+  position: relative;
+}
+
+.avatar-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--green-light);
+  display: flex; align-items: center; justify-content: center;
+  border: none; cursor: pointer;
+  transition: background 0.2s;
+}
+
+.avatar-btn:hover { background: var(--green-mid); }
+.avatar-btn:hover svg path, .avatar-btn:hover svg circle { stroke: white; }
+
+/* Dropdown */
+.profile-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 200px;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+  border: 1px solid var(--green-light);
+  z-index: 100;
+  overflow: hidden;
+  animation: dropIn 0.2s ease;
+}
+
+.profile-dropdown.open { display: block; }
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Header del dropdown */
+.pd-header {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--green-light);
+  background: var(--green-pale);
+}
+
+.pd-name {
+  font-weight: 700; font-size: 14px; color: var(--green-dark);
+}
+
+.pd-type {
+  font-size: 11px; color: var(--gray-text); margin-top: 2px;
+}
+
+/* Items */
+.pd-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px;
+  font-size: 13px; font-weight: 500; color: var(--text-dark);
+  cursor: pointer; text-decoration: none;
+  transition: background 0.15s;
+  border: none; background: none; width: 100%; text-align: left;
+}
+
+.pd-item:hover { background: var(--green-pale); }
+
+.pd-item-icon { font-size: 16px; width: 20px; text-align: center; }
+
+.pd-item.danger { color: var(--red); }
+.pd-item.danger:hover { background: #fde8e8; }
+
+.pd-divider { height: 1px; background: var(--green-light); margin: 2px 0; }

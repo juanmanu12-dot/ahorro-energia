@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Evocolt — Hogar</title>
+  <link rel="stylesheet" href="../../shared/global.css"/>
+  <link rel="stylesheet" href="../../shared/components.css"/>
+  <link rel="stylesheet" href="../../shared/profile-menu.css"/>
+  <link rel="stylesheet" href="../../shared/config-modal.css"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="page-center"><div class="phone-frame">
+
+  <div class="top-bar">
+    <div class="logo-row">
+      <div class="logo-circle"><svg viewBox="0 0 40 40" fill="none" width="20"><circle cx="20" cy="14" r="8" stroke="#2e8b57" stroke-width="1.5"/><path d="M20 24C11 24 6 28 6 32" stroke="#2e8b57" stroke-width="1.5" stroke-linecap="round"/><path d="M20 24C29 24 34 28 34 32" stroke="#2e8b57" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <span class="brand-name">Evocolt</span>
+    </div>
+    <div class="avatar-wrap">
+      <button class="avatar-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#2e8b57" stroke-width="1.5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#2e8b57" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+    </div>
+  </div>
+
+  <div class="phone-body" style="overflow-y:auto; max-height:600px;">
+
+    <h1 class="greeting">¡Hola, Carlos!</h1>
+    <div class="location-row">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="#6b7c74"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+      Mi Casa · Envigado · Estrato 3
+    </div>
+
+    <!-- Gasto vs presupuesto -->
+    <div class="budget-card">
+      <div class="budget-label">Gasto Actual vs. Presupuesto Mensual</div>
+      <div class="ring-wrap">
+        <svg viewBox="0 0 140 140" width="140" height="140" style="transform:rotate(-90deg)">
+          <circle cx="70" cy="70" r="54" stroke="#b2d8c4" stroke-width="14" fill="none"/>
+          <circle cx="70" cy="70" r="54" stroke="#2e8b57" stroke-width="14" fill="none"
+            stroke-dasharray="339" id="ringArc" stroke-dashoffset="193" stroke-linecap="round"/>
+        </svg>
+        <div class="ring-center">
+          <div class="ring-pct" id="ringPct">43%</div>
+          <div class="ring-sub">del presupuesto</div>
+        </div>
+      </div>
+      <div class="ring-amount" id="ringAmt">COP $185,200</div>
+      <div class="ring-budget" id="ringBudget">de COP $430,000 mensual</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stat-row">
+      <div class="stat-card"><div class="stat-icon">⚡</div><div class="stat-val" id="statHoy">$5,120</div><div class="stat-lbl">Gasto Hoy</div></div>
+      <div class="stat-card"><div class="stat-icon">📊</div><div class="stat-val" id="statKwh">125 kWh</div><div class="stat-lbl">Este mes</div></div>
+      <div class="stat-card"><div class="stat-icon">📈</div><div class="stat-val" id="statProm">$6,173</div><div class="stat-lbl">Promedio/día</div></div>
+    </div>
+
+    <!-- Electrodomésticos -->
+    <div class="section-title">
+      Mis electrodomésticos
+      <button class="add-member-btn" onclick="openApModal()">+ Agregar</button>
+    </div>
+    <div class="devices-list" id="devicesList"></div>
+
+    <!-- Consumo estimado -->
+    <div class="consume-summary" id="consumeSummary">
+      <div class="cs-row">
+        <span>Consumo estimado/mes:</span>
+        <strong id="csKwh">— kWh</strong>
+      </div>
+      <div class="cs-row">
+        <span>Costo estimado/mes:</span>
+        <strong id="csCop" style="color:var(--green-dark)">— COP</strong>
+      </div>
+      <div class="cs-bar-wrap">
+        <div class="cs-bar-track">
+          <div class="cs-bar-fill" id="csBar" style="width:43%"></div>
+        </div>
+        <span id="csBarPct">43% del presupuesto</span>
+      </div>
+    </div>
+
+    <!-- Miembros del hogar -->
+    <div class="section-title" style="margin-top:8px;">
+      Miembros del hogar
+      <button class="add-member-btn" onclick="openMemberModal()">+ Agregar</button>
+    </div>
+    <div class="members-row" id="membersRow">
+      <div class="member-chip">👤 Carlos <span class="member-role">Titular</span></div>
+      <div class="member-chip">👤 Ana</div>
+      <div class="member-chip">👤 Luis</div>
+    </div>
+
+    <!-- Consejos carrusel -->
+    <div class="section-title" style="margin-top:4px;">💡 Consejos de ahorro</div>
+    <div class="tips-viewport" id="tipsViewport">
+      <div class="tips-track" id="tipsTrack"></div>
+    </div>
+    <div class="tips-nav">
+      <button class="carousel-btn sm" onclick="slideTip(-1)">‹</button>
+      <div class="tips-dots" id="tipsDots"></div>
+      <button class="carousel-btn sm" onclick="slideTip(1)">›</button>
+    </div>
+
+  </div>
+
+  <a href="../aparatos/index.html" class="fab">+</a>
+
+  <nav class="bottom-nav">
+    <div class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#2e8b57" stroke-width="1.5" fill="#e8f5ee"/></svg>Inicio</div>
+    <a href="../aparatos/index.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="2" stroke="#6b7c74" stroke-width="1.5"/></svg>Aparatos</a>
+    <a href="../tarifas/index.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="#6b7c74" stroke-width="1.5" stroke-linecap="round"/></svg>Tarifas</a>
+    <a href="../reportes/index.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M9 17H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2" stroke="#6b7c74" stroke-width="1.5"/></svg>Reportes</a>
+  </nav>
+
+</div></div>
+
+<!-- MODAL: Agregar electrodoméstico -->
+<div class="modal-overlay" id="apModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">Agregar electrodoméstico</span>
+      <button class="modal-close" onclick="closeApModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="input-group">
+        <label class="input-label">Nombre del aparato</label>
+        <input class="input-field" type="text" id="ap_name" placeholder="Ej. Nevera, TV, Lavadora..."/>
+      </div>
+      <div class="quick-ap-row">
+        <span class="input-label" style="display:block;margin-bottom:6px;">O elige uno rápido:</span>
+        <div class="quick-ap-list" id="quickApList"></div>
+      </div>
+      <div class="twin-inputs">
+        <div class="input-group">
+          <label class="input-label">Potencia (W)</label>
+          <input class="input-field" type="number" id="ap_watts" placeholder="Ej. 150" oninput="previewAp()"/>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Horas/día</label>
+          <input class="input-field" type="number" id="ap_hours" placeholder="Ej. 8" step="0.5" oninput="previewAp()"/>
+        </div>
+      </div>
+      <div class="ap-preview" id="apPreview" style="display:none;">
+        <div style="font-size:11px;color:var(--gray-text);margin-bottom:2px;">Consumo estimado</div>
+        <div style="font-size:18px;font-weight:700;color:var(--green-dark);" id="apPreviewKwh">—</div>
+        <div style="font-size:12px;color:var(--gray-text);" id="apPreviewCop">—</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeApModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveAp()">Agregar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Agregar miembro -->
+<div class="modal-overlay" id="memberModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">Agregar miembro</span>
+      <button class="modal-close" onclick="closeMemberModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="input-group"><label class="input-label">Nombre</label><input class="input-field" type="text" id="memberName" placeholder="Ej. María"/></div>
+      <div class="input-group">
+        <label class="input-label">Relación</label>
+        <select class="input-field" id="memberRel">
+          <option value="">Selecciona...</option>
+          <option>Pareja</option><option>Hijo/a</option><option>Padre/Madre</option><option>Compañero/a</option><option>Otro</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeMemberModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveMember()">Agregar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Configuración -->
+<div class="modal-overlay" id="configModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title">⚙️ Configuración</span>
+      <button class="modal-close" onclick="document.getElementById('configModal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="input-group"><label class="input-label">Empresa de energía</label><select class="input-field"><option>EPM</option><option>Codensa</option><option>ESSA</option></select></div>
+      <div class="input-group"><label class="input-label">Estrato</label><select class="input-field"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option></select></div>
+      <div class="input-group"><label class="input-label">Presupuesto mensual (COP)</label><input class="input-field" type="number" placeholder="430000"/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="document.getElementById('configModal').classList.remove('open')">Cancelar</button>
+      <button class="btn-primary" onclick="document.getElementById('configModal').classList.remove('open')">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../../shared/profile-menu.js"></script>
+<script>
+const TARIFA = 721;
+const BUDGET = 430000;
+const DAYS   = 30;
+function fmt(n) { return 'COP $' + Math.round(n).toLocaleString('es-CO'); }
+
+/* ── Electrodomésticos ── */
+const QUICK = [
+  { icon:'🧊', name:'Nevera',        w:180, h:24 },
+  { icon:'❄️', name:'Aire acond.',   w:1200,h:4  },
+  { icon:'📺', name:'Televisor',     w:100, h:4  },
+  { icon:'🫧', name:'Lavadora',      w:500, h:1  },
+  { icon:'💡', name:'Lámpara LED',   w:10,  h:6  },
+  { icon:'📻', name:'Microondas',    w:1000,h:0.5},
+  { icon:'🖥️', name:'Computador',   w:150, h:8  },
+  { icon:'🔥', name:'Ducha eléctrica',w:3500,h:0.5},
+];
+
+let devices = [
+  { icon:'🧊', name:'Nevera LG',          w:180,  h:24, on:true  },
+  { icon:'❄️', name:'Aire Acondicionado', w:1200, h:4,  on:true  },
+  { icon:'🫧', name:'Lavadora',           w:500,  h:1,  on:true  },
+  { icon:'📻', name:'Microondas',         w:1000, h:0.5,on:true  },
+];
+
+function calcDevice(d) {
+  const kwh = (d.w/1000) * d.h * DAYS;
+  return { kwh, cop: kwh * TARIFA };
+}
+
+function renderDevices() {
+  let totalKwh = 0, totalCop = 0;
+  const list = document.getElementById('devicesList');
+  list.innerHTML = devices.map((d,i) => {
+    const { kwh, cop } = calcDevice(d);
+    if (d.on) { totalKwh += kwh; totalCop += cop; }
+    const badge = cop > 50000 ? 'badge-alto' : cop > 20000 ? 'badge-medio' : 'badge-bajo';
+    const badgeTxt = cop > 50000 ? 'Alto' : cop > 20000 ? 'Medio' : 'Bajo';
+    return `<div class="device-item">
+      <div class="device-icon">${d.icon}</div>
+      <div class="device-info">
+        <div class="device-name">${d.name}</div>
+        <div class="device-watts">${d.w}W · ${d.h}h/día · ${kwh.toFixed(1)} kWh/mes</div>
+      </div>
+      <span class="badge ${badge}">${badgeTxt}</span>
+      <button class="toggle ${d.on?'':'off'}" onclick="toggleDev(${i})"></button>
+    </div>`;
+  }).join('');
+
+  // Update summary
+  const pct = Math.min(100, Math.round((totalCop / BUDGET) * 100));
+  document.getElementById('csKwh').textContent = totalKwh.toFixed(1) + ' kWh';
+  document.getElementById('csCop').textContent  = fmt(totalCop);
+  document.getElementById('csBar').style.width  = pct + '%';
+  document.getElementById('csBar').style.background = pct > 90 ? 'var(--red)' : pct > 70 ? 'var(--orange)' : 'var(--green-mid)';
+  document.getElementById('csBarPct').textContent = pct + '% del presupuesto';
+
+  // Promedio diario
+  const daily = totalCop / DAYS;
+  document.getElementById('statProm').textContent = '$' + Math.round(daily).toLocaleString('es-CO');
+  document.getElementById('statKwh').textContent  = totalKwh.toFixed(0) + ' kWh';
+}
+
+function toggleDev(i) {
+  devices[i].on = !devices[i].on;
+  renderDevices();
+}
+
+/* Quick ap buttons */
+function buildQuickAps() {
+  document.getElementById('quickApList').innerHTML = QUICK.map(q =>
+    `<button class="quick-ap-btn" onclick="fillQuick('${q.icon}','${q.name}',${q.w},${q.h})">${q.icon} ${q.name}</button>`
+  ).join('');
+}
+
+function fillQuick(icon, name, w, h) {
+  document.getElementById('ap_name').value  = name;
+  document.getElementById('ap_watts').value = w;
+  document.getElementById('ap_hours').value = h;
+  previewAp();
+}
+
+function previewAp() {
+  const w = parseFloat(document.getElementById('ap_watts').value);
+  const h = parseFloat(document.getElementById('ap_hours').value);
+  const prev = document.getElementById('apPreview');
+  if (!w || !h) { prev.style.display='none'; return; }
+  prev.style.display = '';
+  const kwh = (w/1000)*h*DAYS;
+  document.getElementById('apPreviewKwh').textContent = kwh.toFixed(1) + ' kWh/mes';
+  document.getElementById('apPreviewCop').textContent = fmt(kwh * TARIFA) + '/mes';
+}
+
+function openApModal()  { buildQuickAps(); document.getElementById('apModal').classList.add('open'); }
+function closeApModal() {
+  document.getElementById('apModal').classList.remove('open');
+  document.getElementById('apPreview').style.display='none';
+  ['ap_name','ap_watts','ap_hours'].forEach(id => document.getElementById(id).value='');
+}
+
+function saveAp() {
+  const name = document.getElementById('ap_name').value.trim();
+  const w    = parseFloat(document.getElementById('ap_watts').value);
+  const h    = parseFloat(document.getElementById('ap_hours').value);
+  if (!name || !w || !h) { alert('Completa todos los campos.'); return; }
+  const icons = {'Nevera':'🧊','Aire':'❄️','Lavadora':'🫧','Microondas':'📻','Televisor':'📺','Computador':'🖥️','Ducha':'🔥','Lámpara':'💡'};
+  const icon = Object.entries(icons).find(([k]) => name.toLowerCase().includes(k.toLowerCase()))?.[1] || '🔌';
+  devices.push({ icon, name, w, h, on:true });
+  renderDevices();
+  closeApModal();
+}
+
+/* ── Miembros ── */
+function openMemberModal()  { document.getElementById('memberModal').classList.add('open'); }
+function closeMemberModal() { document.getElementById('memberModal').classList.remove('open'); }
+function saveMember() {
+  const name = document.getElementById('memberName').value.trim();
+  const rel  = document.getElementById('memberRel').value;
+  if (!name) { alert('Ingresa el nombre.'); return; }
+  const chip = document.createElement('div');
+  chip.className = 'member-chip new';
+  chip.innerHTML = `👤 ${name}${rel ? ` <span class="member-role">${rel}</span>` : ''}`;
+  document.getElementById('membersRow').appendChild(chip);
+  document.getElementById('memberName').value = '';
+  document.getElementById('memberRel').value  = '';
+  closeMemberModal();
+  setTimeout(() => chip.classList.remove('new'), 400);
+}
+
+/* ── Consejos carrusel ── */
+const TIPS = [
+  { icon:'🔌', text:'Desconecta los cargadores al terminar. Siguen consumiendo hasta 2W enchufados.',     save:'~$2.400/mes', color:'#1a5c3a' },
+  { icon:'❄️', text:'Cada grado menos en el A/C reduce el consumo un 8%. Mantén 24°C.',                 save:'~$8.000/mes', color:'#1f6e3e' },
+  { icon:'🧊', text:'Revisa el sello de tu nevera. Si está dañado, consume hasta 20% más.',              save:'~$5.000/mes', color:'#174f30' },
+  { icon:'🌙', text:'Apaga el televisor con el botón físico, no con el control. En standby consume.',   save:'~$1.200/mes', color:'#2e7a4a' },
+  { icon:'🫧', text:'Usa agua fría en la lavadora. El 90% del consumo es para calentar el agua.',       save:'~$3.500/mes', color:'#1a5c3a' },
+  { icon:'💡', text:'Si aún usas bombillas incandescentes, cámbialas por LED. Consumen 80% menos.',     save:'~$4.500/mes', color:'#1f6e3e' },
+];
+
+let tipIdx = 0;
+function buildTips() {
+  const track = document.getElementById('tipsTrack');
+  const dots  = document.getElementById('tipsDots');
+  track.innerHTML = TIPS.map(t => `
+    <div class="htip-card" style="background:${t.color}">
+      <span class="htip-icon">${t.icon}</span>
+      <div class="htip-text">${t.text}</div>
+      <div class="htip-save">💰 ${t.save}</div>
+    </div>`).join('');
+  dots.innerHTML = TIPS.map((_,i) =>
+    `<span class="dot ${i===0?'active':''}"></span>`).join('');
+}
+
+function slideTip(dir) {
+  tipIdx = (tipIdx + dir + TIPS.length) % TIPS.length;
+  const w = document.getElementById('tipsViewport').offsetWidth;
+  document.getElementById('tipsTrack').style.transform = `translateX(-${tipIdx * w}px)`;
+  document.querySelectorAll('#tipsDots .dot').forEach((d,i) => d.classList.toggle('active', i===tipIdx));
+}
+
+// Swipe
+const vp = document.getElementById('tipsViewport');
+let sx = 0;
+vp.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive:true });
+vp.addEventListener('touchend',   e => { const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx)>40) slideTip(dx<0?1:-1); });
+
+renderDevices();
+buildTips();
+</script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Evocolt — Consumo por áreas</title>
+  <link rel="stylesheet" href="../../shared/global.css"/>
+  <link rel="stylesheet" href="../../shared/components.css"/>
+  <link rel="stylesheet" href="../../shared/profile-menu.css"/>
+  <link rel="stylesheet" href="../../shared/config-modal.css"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="page-center"><div class="phone-frame">
+
+  <!-- Top bar limpio (sin hamburger ni 3 líneas) -->
+  <div class="sub-top-bar">
+    <a href="../inicio/index.html" class="back-btn">←</a>
+    <span class="sub-title">Consumo por áreas</span>
+    <button class="icon-btn">📅</button>
+  </div>
+
+  <div class="phone-body" style="overflow-y:auto;max-height:600px;">
+
+    <!-- Filtro Día / Semana / Mes -->
+    <div class="period-tabs">
+      <button class="period-tab" id="tab-dia"    onclick="setPeriod('dia')">Día</button>
+      <button class="period-tab" id="tab-semana" onclick="setPeriod('semana')">Semana</button>
+      <button class="period-tab active" id="tab-mes" onclick="setPeriod('mes')">Mes</button>
+    </div>
+
+    <!-- Donut -->
+    <div class="donut-center">
+      <svg viewBox="0 0 200 200" width="190" height="190" id="donutSvg">
+        <circle cx="100" cy="100" r="72" fill="none" stroke="#eee" stroke-width="28"/>
+        <text x="100" y="95"  text-anchor="middle" font-size="22" font-weight="700" fill="#0f2e1e" id="donutNum">—</text>
+        <text x="100" y="112" text-anchor="middle" font-size="11" fill="#6b7c74" id="donutLbl">kWh Total</text>
+      </svg>
+    </div>
+
+    <!-- Cards de sectores -->
+    <div class="area-cards" id="areaCards"></div>
+
+    <!-- Info -->
+    <div class="alert-card" style="margin-top:8px;">
+      💡 <span id="infoText">Datos del mes en curso.</span>
+    </div>
+
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="../inicio/index.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#6b7c74" stroke-width="1.5"/></svg>Inicio</a>
+    <div class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="1" stroke="#2e8b57" stroke-width="1.5" fill="#e8f5ee"/><rect x="13" y="3" width="8" height="8" rx="1" stroke="#2e8b57" stroke-width="1.5" fill="#e8f5ee"/><rect x="3" y="13" width="8" height="8" rx="1" stroke="#2e8b57" stroke-width="1.5" fill="#e8f5ee"/><rect x="13" y="13" width="8" height="8" rx="1" stroke="#2e8b57" stroke-width="1.5" fill="#e8f5ee"/></svg>Áreas</div>
+    <a href="../control-costos/index.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6" stroke="#6b7c74" stroke-width="1.5" stroke-linecap="round"/></svg>Costos</a>
+    <a href="../reporte-ejecutivo/index.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M9 17H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2" stroke="#6b7c74" stroke-width="1.5"/></svg>Reportes</a>
+  </nav>
+
+</div></div>
+<script src="../../shared/profile-menu.js"></script>
+<script>
+const COLORS = ['#4a90d9','#2e8b57','#d4b24a','#e09052','#9b59b6','#e05252'];
+const ICONS  = ['🏭','🏢','💡','🖥️','🔧','📦'];
+
+// Datos por período
+const DATA = {
+  mes:    { sectors:[{name:'Producción',kwh:14280},{name:'Oficinas',kwh:9996},{name:'Iluminación',kwh:4284}], label:'Datos del mes en curso (mayo 2024).' },
+  semana: { sectors:[{name:'Producción',kwh:3360},{name:'Oficinas',kwh:2352},{name:'Iluminación',kwh:1008}], label:'Datos de la semana actual (13-19 mayo).' },
+  dia:    { sectors:[{name:'Producción',kwh:476},{name:'Oficinas',kwh:333},{name:'Iluminación',kwh:143}],    label:'Datos de hoy (martes 14 mayo).' },
+};
+
+let period = 'mes';
+
+function setPeriod(p) {
+  period = p;
+  ['dia','semana','mes'].forEach(t => document.getElementById('tab-'+t).classList.toggle('active', t===p));
+  render();
+}
+
+function render() {
+  const { sectors, label } = DATA[period];
+  const total = sectors.reduce((s,x)=>s+x.kwh,0);
+  document.getElementById('donutNum').textContent = total.toLocaleString('es-CO');
+  document.getElementById('donutLbl').textContent = period==='dia' ? 'kWh Hoy' : period==='semana' ? 'kWh Semana' : 'kWh Total';
+  document.getElementById('infoText').textContent = label;
+
+  renderDonut(sectors, total);
+
+  const cards = document.getElementById('areaCards');
+  cards.innerHTML = sectors.map((s,i) => {
+    const pct = total > 0 ? ((s.kwh/total)*100).toFixed(0) : 0;
+    return `<div class="area-card">
+      <div class="ac-icon" style="background:${COLORS[i%COLORS.length]}22">${ICONS[i%ICONS.length]}</div>
+      <div class="ac-info">
+        <div class="ac-name">${s.name}</div>
+        <div class="ac-kwh">${s.kwh.toLocaleString('es-CO')} kWh</div>
+        <div class="ac-bar-track"><div class="ac-bar-fill" style="width:${pct}%;background:${COLORS[i%COLORS.length]}"></div></div>
+      </div>
+      <div class="ac-pct" style="color:${COLORS[i%COLORS.length]}">${pct}%</div>
+    </div>`;
+  }).join('');
+}
+
+function renderDonut(sectors, total) {
+  const svg = document.getElementById('donutSvg');
+  svg.querySelectorAll('.arc').forEach(e=>e.remove());
+  if (!total) return;
+  const R=72, C=100, W=28, circ=2*Math.PI*R;
+  let off=0;
+  sectors.forEach((s,i)=>{
+    const dash=(s.kwh/total)*circ;
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',C); c.setAttribute('cy',C); c.setAttribute('r',R);
+    c.setAttribute('fill','none');
+    c.setAttribute('stroke',COLORS[i%COLORS.length]);
+    c.setAttribute('stroke-width',W);
+    c.setAttribute('stroke-dasharray',`${dash} ${circ-dash}`);
+    c.setAttribute('stroke-dashoffset',-off);
+    c.setAttribute('transform',`rotate(-90 ${C} ${C})`);
+    c.classList.add('arc');
+    svg.insertBefore(c, svg.querySelector('text'));
+    off+=dash;
+  });
+}
+
+render();
+</script>
+</body>
+</html>

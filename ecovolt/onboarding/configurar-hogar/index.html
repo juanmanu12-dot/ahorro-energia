@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Evocolt — Configura tu perfil</title>
+  <link rel="stylesheet" href="../../shared/global.css"/>
+  <link rel="stylesheet" href="../../shared/components.css"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="page-center"><div class="phone-frame">
+
+  <div class="logo-centered">
+    <a href="../../auth/tipo-cuenta/index.html" class="back-btn">←</a>
+    <div class="logo-circle">
+      <svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="14" r="8" stroke="#2e8b57" stroke-width="1.5"/><path d="M20 24C11 24 6 28 6 32" stroke="#2e8b57" stroke-width="1.5" stroke-linecap="round"/><path d="M20 24C29 24 34 28 34 32" stroke="#2e8b57" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <span class="brand-name">Evocolt</span>
+  </div>
+
+  <!-- HOGAR -->
+  <div class="phone-body" id="formHogar" style="display:none;">
+    <h1 class="screen-title">Configura<br>tu hogar</h1>
+    <p class="screen-sub">Ingresa tus datos para calcular el consumo y personalizar tu experiencia.</p>
+    <div class="input-group">
+      <label class="input-label">Ciudad</label>
+      <input class="input-field" type="text" placeholder="Ej. Medellín" id="h_ciudad"/>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Empresa de energía</label>
+      <select class="input-field" id="h_empresa">
+        <option value="">Selecciona...</option>
+        <option>EPM</option><option>Codensa</option><option>Electricaribe</option><option>ESSA</option><option>Otra</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Estrato socioeconómico</label>
+      <select class="input-field" id="h_estrato">
+        <option value="">Selecciona...</option>
+        <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Tipo de vivienda</label>
+      <select class="input-field" id="h_vivienda">
+        <option value="">Selecciona...</option>
+        <option>Apartamento</option><option>Casa</option><option>Habitación</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Presupuesto mensual (COP)</label>
+      <input class="input-field" type="number" placeholder="Ej. 150000" id="h_presupuesto"/>
+    </div>
+    <button class="btn-primary" onclick="goNext()">Guardar y continuar</button>
+  </div>
+
+  <!-- ESTUDIANTE -->
+  <div class="phone-body" id="formEstudiante" style="display:none;">
+    <h1 class="screen-title">Configura<br>tu perfil</h1>
+    <p class="screen-sub">Cuéntanos sobre tu espacio y tus hábitos para calcular tu consumo.</p>
+    <div class="input-group">
+      <label class="input-label">Ciudad</label>
+      <input class="input-field" type="text" placeholder="Ej. Medellín" id="e_ciudad"/>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Universidad o institución</label>
+      <input class="input-field" type="text" placeholder="Ej. Universidad EAFIT" id="e_universidad"/>
+    </div>
+
+
+
+    <button class="btn-primary" onclick="goNext()">Guardar y continuar</button>
+  </div>
+
+  <!-- EMPRESA -->
+  <div class="phone-body" id="formEmpresa" style="display:none;">
+    <h1 class="screen-title">Configura<br>tu empresa</h1>
+    <p class="screen-sub">Registra los datos de tu empresa para comenzar a monitorear el consumo por sectores.</p>
+    <div class="input-group">
+      <label class="input-label">Nombre de la empresa</label>
+      <input class="input-field" type="text" placeholder="Ej. Empresa Verde S.A.S" id="emp_nombre"/>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Ciudad</label>
+      <input class="input-field" type="text" placeholder="Ej. Medellín" id="emp_ciudad"/>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Empresa prestadora del servicio eléctrico</label>
+      <select class="input-field" id="emp_prestadora">
+        <option value="">Selecciona...</option>
+        <option>EPM</option><option>Codensa</option><option>Electricaribe</option>
+        <option>ESSA</option><option>EdeQ</option><option>Otra</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Sector económico</label>
+      <select class="input-field" id="emp_sector">
+        <option value="">Selecciona...</option>
+        <option>Manufactura / Producción</option>
+        <option>Comercio / Retail</option>
+        <option>Servicios / Oficinas</option>
+        <option>Salud</option>
+        <option>Educación</option>
+        <option>Tecnología</option>
+        <option>Otro</option>
+      </select>
+    </div>
+    <div class="input-group">
+      <label class="input-label">Meta de gasto mensual (COP)</label>
+      <input class="input-field" type="number" placeholder="Ej. 2800000" id="emp_meta"/>
+    </div>
+    <button class="btn-primary" onclick="goNext()">Guardar y continuar</button>
+  </div>
+
+</div></div>
+<script>
+  const type = sessionStorage.getItem('accountType') || 'hogar';
+  const formMap = { hogar:'formHogar', estudiante:'formEstudiante', empresa:'formEmpresa' };
+  document.getElementById(formMap[type] || 'formHogar').style.display = '';
+
+  function goNext() {
+    const routes = {
+      hogar:      '../../hogar/inicio/index.html',
+      empresa:    '../../empresa/inicio/index.html',
+      estudiante: '../../estudiante/inicio/index.html',
+    };
+    window.location.href = routes[type];
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Evocolt — División de gastos</title>
+  <link rel="stylesheet" href="../../shared/global.css"/>
+  <link rel="stylesheet" href="../../shared/components.css"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="page-center"><div class="phone-frame">
+
+    <div class="sub-top-bar">
+      <a href="../inicio/index.html" class="back-btn">←</a>
+      <span class="sub-title">División de gastos</span>
+      <button class="icon-btn">ⓘ</button>
+    </div>
+
+    <div class="phone-body">
+      <div style="font-size:12px;color:var(--gray-text);margin-bottom:4px;">Factura total del mes</div>
+      <div class="big-amount">COP $180.000</div>
+      <div style="font-size:11px;color:var(--gray-text);margin-bottom:18px;">Período de facturación: 1 - 31 mayo</div>
+
+      <!-- Personas -->
+      <div class="section-title">Personas en la casa</div>
+      <div class="people-row">
+        <button class="people-btn" onclick="changeCount(-1)">−</button>
+        <span class="people-count" id="count">3</span>
+        <button class="people-btn" onclick="changeCount(1)">+</button>
+      </div>
+      <div class="people-icons" id="icons">
+        <span>👤</span><span>👤</span><span>👤</span>
+      </div>
+
+      <!-- Tu parte -->
+      <div class="card my-part">
+        <div style="font-size:12px;color:var(--gray-text);margin-bottom:4px;">Tu parte de la factura</div>
+        <div class="big-amount" style="font-size:24px;" id="myPart">COP $60.000</div>
+        <div style="font-size:11px;color:var(--gray-text);" id="myPct">Pagas el 33% del total</div>
+        <div class="my-avatar">👤</div>
+      </div>
+
+      <div class="alert-card" style="margin-bottom:18px;">
+        💡 <span>Si alguien cambia su consumo, puedes ajustar la división fácilmente.</span>
+      </div>
+
+      <!-- Resumen -->
+      <div class="section-title">Resumen de la división</div>
+
+      <div class="split-item">
+        <span class="split-icon">👤</span>
+        <div class="split-info"><div class="split-name">Tú</div><div class="split-pct" id="pct1">33%</div></div>
+        <div class="split-amount" id="amt1">COP $60.000</div>
+      </div>
+      <div class="split-item">
+        <span class="split-icon">👤</span>
+        <div class="split-info"><div class="split-name">Compañero 2</div><div class="split-pct" id="pct2">33%</div></div>
+        <div class="split-amount" id="amt2">COP $60.000</div>
+      </div>
+      <div class="split-item" id="row3">
+        <span class="split-icon">👤</span>
+        <div class="split-info"><div class="split-name">Compañero 3</div><div class="split-pct" id="pct3">33%</div></div>
+        <div class="split-amount" id="amt3">COP $60.000</div>
+      </div>
+
+      <div class="alert-card" style="cursor:pointer;">
+        👤 <span>¿Alguien se fue o llegó? Ajusta el número de personas para recalcular.</span>
+        <span style="margin-left:auto;color:var(--green-mid)">›</span>
+      </div>
+    </div>
+
+    <nav class="bottom-nav">
+      <a href="../inicio/index.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#6b7c74" stroke-width="1.5"/></svg>Inicio</a>
+      <a href="../aparatos/index.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="2" stroke="#6b7c74" stroke-width="1.5"/></svg>Aparatos</a>
+      <div class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="#2e8b57" stroke-width="1.5"/><circle cx="9" cy="7" r="4" stroke="#2e8b57" stroke-width="1.5"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="#2e8b57" stroke-width="1.5"/></svg>Gastos</div>
+      <a href="../reportes/index.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M9 17H7a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v10a2 2 0 01-2 2h-2" stroke="#6b7c74" stroke-width="1.5"/></svg>Reportes</a>
+    </nav>
+
+  </div></div>
+
+  <script>
+    const total = 180000;
+    let count = 3;
+
+    function fmt(n) { return 'COP $' + n.toLocaleString('es-CO'); }
+
+    function update() {
+      const each = Math.round(total / count);
+      const pct = Math.round(100 / count);
+      document.getElementById('count').textContent = count;
+      document.getElementById('myPart').textContent = fmt(each);
+      document.getElementById('myPct').textContent = 'Pagas el ' + pct + '% del total';
+
+      const ids = ['1','2','3','4'];
+      ids.forEach((id, i) => {
+        const el = document.getElementById('amt' + id);
+        const pe = document.getElementById('pct' + id);
+        const row = document.getElementById('row' + id);
+        if (!el) return;
+        if (i < count) {
+          el.textContent = fmt(each);
+          pe.textContent = pct + '%';
+          if (row) row.style.display = 'flex';
+        } else {
+          if (row) row.style.display = 'none';
+        }
+      });
+
+      // icons
+      const ic = document.getElementById('icons');
+      ic.innerHTML = Array(count).fill('<span>👤</span>').join('');
+    }
+
+    function changeCount(d) {
+      count = Math.max(1, Math.min(4, count + d));
+      update();
+    }
+
+    update();
+  </script>
+</body>
+</html>

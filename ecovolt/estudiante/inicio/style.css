@@ -1,0 +1,96 @@
+.page-center { min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px 16px; }
+.bottom-nav a { text-decoration:none; }
+
+.hero-card {
+  background: var(--green-pale);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.hero-text h1 {
+  font-family: var(--font-display);
+  font-size: 22px; font-weight: 900;
+  color: var(--green-dark); margin-bottom: 4px;
+}
+
+.hero-text p { font-size: 13px; color: var(--gray-text); line-height: 1.4; }
+.hero-icon { font-size: 48px; }
+
+.consume-card { position: relative; }
+
+.consume-label {
+  font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 6px;
+}
+
+.consume-label span { font-size: 11px; font-weight: 400; color: var(--gray-text); }
+
+.consume-amount {
+  font-family: var(--font-display);
+  font-size: 28px; font-weight: 900; color: var(--green-dark); margin-bottom: 4px;
+}
+
+.consume-ok { font-size: 12px; color: var(--gray-text); }
+
+.consume-trend {
+  position: absolute; top: 16px; right: 16px;
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--green-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+
+.progress-bar {
+  height: 8px; background: var(--green-light);
+  border-radius: 4px; overflow: hidden; margin-bottom: 6px;
+}
+
+.progress-fill {
+  height: 100%; background: var(--green-mid); border-radius: 4px;
+}
+
+.progress-labels {
+  display: flex; justify-content: space-between;
+  font-size: 11px; color: var(--gray-text);
+}
+
+.group-icons {
+  display: flex; gap: 8px; margin-top: 10px; font-size: 18px;
+}
+
+.tip-link {
+  display: flex; align-items: center; text-decoration: none;
+  cursor: pointer; position: relative;
+}
+
+.tip-arrow {
+  position: absolute; right: 0;
+  font-size: 20px; color: var(--green-mid);
+}
+
+.bottom-nav a { text-decoration: none; }
+
+.quick-row {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 10px; margin-top: 4px;
+}
+
+.quick-card {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px; padding: 14px 8px;
+  background: var(--gray-soft);
+  border: 1.5px solid var(--green-light);
+  border-radius: var(--radius-md);
+  text-decoration: none; cursor: pointer;
+  transition: all 0.2s;
+}
+
+.quick-card:hover {
+  background: var(--green-pale);
+  border-color: var(--green-mid);
+  transform: translateY(-2px);
+}
+
+.quick-icon { font-size: 24px; }
+.quick-label { font-size: 11px; font-weight: 600; color: var(--green-dark); }
